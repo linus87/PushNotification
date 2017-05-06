@@ -3,8 +3,6 @@ package com.linus.pushnotification;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-
 import javapns.communication.exceptions.CommunicationException;
 import javapns.communication.exceptions.KeystoreException;
 import javapns.devices.Device;
@@ -15,14 +13,16 @@ import javapns.notification.PushNotificationManager;
 import javapns.notification.PushNotificationPayload;
 import javapns.notification.PushedNotification;
 
-public class PushManager {
+import org.json.JSONException;
+
+public class PushClient {
 	private static String defaultSound = "default";
 	private PushNotificationManager pushManager;
 	private String msgCertificatePassword;
 	private String certificatePath;
 	private List<PushedNotification> notifications = new ArrayList<PushedNotification>();
 	
-	public PushManager(String certificatePath, String msgCertificatePassword) throws CommunicationException, KeystoreException {
+	public PushClient(String certificatePath, String msgCertificatePassword) throws CommunicationException, KeystoreException {
 		pushManager = new PushNotificationManager();
 		
 		// true：表示的是产品测试推送服务 false：表示的是产品发布推送服务
@@ -79,6 +79,13 @@ public class PushManager {
 	}
 	
 	/**
+	 * Clear all notfications.
+	 */
+	public void clearNotifications() {
+		notifications.clear();
+	}
+	
+	/**
 	 * Send a payload to a single device.
 	 * @param deviceToken
 	 * @param payload
@@ -98,7 +105,7 @@ public class PushManager {
 		// java必须要用导出p12文件 php的话是pem文件
 		String certificatePath = "/Users/lyan2/DuoshoujiRemoteNotification.p12";
 		String msgCertificatePassword = "Duoshouji!";// 导出证书时设置的密码
-		PushManager manager = new PushManager(certificatePath, msgCertificatePassword);
+		PushClient manager = new PushClient(certificatePath, msgCertificatePassword);
 		
 		System.out.println("Linus==========开始推送消息");
 		int badge = 1; // 图标小红圈的数值
